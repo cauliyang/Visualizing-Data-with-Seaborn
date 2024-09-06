@@ -34,6 +34,7 @@ execute:
 
 ::: {.column width="50%"}
 GitHub
+
 ![](./qr-code.png)
 :::
 
@@ -43,10 +44,10 @@ Colab
 
 ::::
 
-## Downloading Data
+Downloading Data
 
 ```{bash}
-mkdir data && wget -P data/ https://raw.githubusercontent.com/cauliyang/Visualizing-Data-with-Seaborn/main/data/Crimes_One_year_prior_to_present_first_1001.csv
+!mkdir data && wget -P data/ https://raw.githubusercontent.com/cauliyang/Visualizing-Data-with-Seaborn/main/data/Crimes_One_year_prior_to_present_first_1001.csv
 ```
 
 ## Setting Up the Environment
