@@ -19,7 +19,6 @@ format:
     footer: "Visualizing Data with Seaborn"
 execute:
   echo: true
-  keep-ipynb: true
 ---
 
 ## Introduction
