@@ -1,0 +1,366 @@
+---
+title: "Visualizing Data with Seaborn (Python Track)"
+author: "Yangyang Li"
+date: "2024-09-11"
+fig-cap-location: bottom
+format: 
+  revealjs:
+    theme: simple
+    slide-number: true
+    show-slide-number: all
+    chalkboard: false 
+    embed-resources: true
+    code-block-height: 650px
+    transition: slide
+    incremental: true
+    margin: 0.05
+execute:
+  echo: true
+---
+
+## Introduction
+
+- What is Seaborn?
+- Why use Seaborn for data visualization?
+- Brief overview of the session
+
+## Setting Up the Environment
+
+```{python}
+# | output: false
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+from matplotlib import rcParams
+
+# Set global font properties to Arial
+rcParams.update(
+    {
+        "font.family": "sans-serif",
+        "font.sans-serif": "Arial",
+        "pdf.fonttype": 42,  # Embed fonts as Type 3 fonts for compatibility
+        "ps.fonttype": 42,
+        "text.usetex": False,
+        "svg.fonttype": "none",
+    }
+)
+
+
+def stardize_columns(df):
+    df.columns = [" ".join(col.strip().split()) for col in df.columns]
+
+
+# Load the data
+df = pd.read_csv("Crimes_One_year_prior_to_present_first_1001.csv")
+stardize_columns(df)
+```
+
+
+## Understanding the Dataset
+
+```{python}
+# | output: true
+# | output-location: slide
+# Display basic information about the dataset
+print(df.info())
+
+# Show the first few rows
+print(df.head(3))
+
+# Basic data cleaning
+df["DATE OF OCCURRENCE"] = pd.to_datetime(df["DATE OF OCCURRENCE"])
+```
+
+## Introduction to Seaborn Plot Types
+
+- Overview of common Seaborn plot types
+- When to use each plot type
+- Basic syntax and structure
+- Complex plot type
+
+## Categorical Plots: Bar Plot
+
+```{python}
+#| fig-width: 12
+#| fig-height: 6
+plt.figure(figsize=(12, 6))
+sns.countplot(data=df, y='PRIMARY DESCRIPTION', order=df['PRIMARY DESCRIPTION'].value_counts().index[:10])
+plt.title('Top 10 Crime Types')
+plt.show()
+```
+
+## Categorical Plots: Box Plot
+
+```{python}
+#| fig-width: 12
+#| fig-height: 6
+df['DAY_OF_WEEK'] = df['DATE OF OCCURRENCE'].dt.day_name()
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=df, x='DAY_OF_WEEK', y='DATE OF OCCURRENCE').set_ylabel('Date')
+plt.title('Distribution of Crimes by Day of the Week')
+plt.show()
+```
+
+## Distribution Plots: Histogram
+
+```{python}
+#| fig-width: 12
+#| fig-height: 6
+df['HOUR'] = df['DATE OF OCCURRENCE'].dt.hour
+plt.figure(figsize=(12, 6))
+sns.histplot(data=df, x='HOUR', bins=24, kde=True)
+plt.title('Distribution of Crimes by Hour of the Day')
+plt.show()
+```
+
+## Distribution Plots: KDE Plot
+
+```{python}
+#| fig-width: 12
+#| fig-height: 6
+plt.figure(figsize=(12, 6))
+sns.kdeplot(data=df, x='HOUR', hue='PRIMARY DESCRIPTION', common_norm=False)
+plt.title('Distribution of Different Crime Types by Hour')
+plt.show()
+```
+
+## Relational Plots: Scatter Plot
+
+```{python}
+# | fig-width: 12
+# | fig-height: 10
+# | output-location: slide
+plt.figure(figsize=(12, 10))
+sns.scatterplot(data=df, x="LONGITUDE", y="LATITUDE", hue="PRIMARY DESCRIPTION")
+plt.title("Geographical Distribution of Crimes")
+plt.show()
+```
+
+## Relational Plots: Line Plot
+
+```{python}
+#| fig-width: 12
+#| fig-height: 6
+crime_counts = df.groupby('DATE OF OCCURRENCE').size().reset_index(name='COUNT')
+plt.figure(figsize=(12, 6))
+sns.lineplot(data=crime_counts, x='DATE OF OCCURRENCE', y='COUNT')
+plt.title('Crime Trends Over Time')
+plt.xticks(rotation=45)
+plt.show()
+```
+
+
+## Advanced Customization
+
+```{python}
+# | fig-width: 14
+# | fig-height: 8
+# | output-location: slide
+plt.figure(figsize=(14, 8))
+sns.set_style("whitegrid")
+sns.set_palette("deep")
+
+g = sns.countplot(
+    data=df,
+    y="PRIMARY DESCRIPTION",
+    order=df["PRIMARY DESCRIPTION"].value_counts().index[:10],
+)
+
+g.set_title("Top 10 Crime Types", fontsize=20)
+g.set_xlabel("Count", fontsize=14)
+g.set_ylabel("Crime Type", fontsize=14)
+
+for i, v in enumerate(df["PRIMARY DESCRIPTION"].value_counts()[:10]):
+    g.text(v + 3, i, str(v), color="black", va="center")
+
+plt.tight_layout()
+plt.show()
+```
+
+
+## Heatmap
+
+- Useful for visualizing correlation between variables
+- Can show patterns and relationships in complex datasets
+
+```{python}
+# | fig-width: 12
+# | fig-height: 12
+# | output-location: slide
+# Select numeric columns
+numeric_cols = df.select_dtypes(include=[np.number]).columns
+
+# Compute correlation matrix
+corr_matrix = df[numeric_cols].corr()
+
+# Create heatmap
+plt.figure(figsize=(12, 12))
+sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", linewidths=0.5)
+plt.title("Correlation Heatmap of Numeric Variables")
+plt.show() 
+```
+## Customized Heatmap 
+
+```{python}
+# | fig-width: 12
+# | fig-height: 12
+# | output-location: slide
+# Select numeric columns
+numeric_cols = df.select_dtypes(include=[np.number]).columns
+
+# Compute correlation matrix
+corr_matrix = df[numeric_cols].corr()
+
+# Create a mask for the upper triangle
+mask = np.triu(np.ones_like(corr_matrix, dtype=bool))
+
+# Set up the matplotlib figure
+plt.figure(figsize=(12, 12))
+
+# Create heatmap with only upper triangle
+sns.heatmap(
+    corr_matrix,
+    mask=mask,
+    annot=True,
+    cmap="coolwarm",
+    vmin=-1,
+    vmax=1,
+    center=0,
+    square=True,
+    linewidths=0.5,
+    cbar_kws={"shrink": 0.8},
+    fmt=".2f",
+)
+
+plt.title("Upper Triangle Correlation Heatmap of Numeric Variables", fontsize=16)
+plt.tight_layout()
+plt.show()
+```
+
+## Pair Plot
+
+- Useful for exploring relationships between multiple variables
+- Creates a grid of scatter plots for each pair of variables
+
+
+```{python}
+# | fig-width: 20
+# | fig-height: 20
+# | output-location: slide
+# Select relevant columns for the pair plot
+cols_to_plot = ["X COORDINATE", "Y COORDINATE", "LATITUDE", "LONGITUDE"]
+
+# Add hour of day
+df["HOUR"] = pd.to_datetime(df["DATE OF OCCURRENCE"]).dt.hour
+
+# Create the pair plot
+plt.figure(figsize=(10, 10))
+pairplot = sns.pairplot(
+    df[cols_to_plot + ["HOUR", "PRIMARY DESCRIPTION"]],
+    hue="PRIMARY DESCRIPTION",
+    palette="viridis",
+    plot_kws={"alpha": 0.6},
+    diag_kind="kde",
+)
+
+plt.suptitle("Pair Plot of Geographic Variables and Hour of Occurrence", y=1.02)
+plt.tight_layout()
+plt.show()
+```
+
+## Regression Plot
+
+- Visualizes the relationship between two variables
+- Includes a linear regression line and confidence interval
+
+```{python}
+# | fig-width: 12
+# | fig-height: 12
+# | output-location: slide
+sns.lmplot(
+    data=df,
+    x="BEAT",
+    y="WARD",
+    col="ARREST",
+    row="DOMESTIC",
+    height=3,
+    facet_kws=dict(sharex=False, sharey=False),
+    scatter_kws={"alpha": 0.5},
+)
+plt.title("Regression Plot: Latitude vs Longitude of Crime Occurrences")
+plt.show()
+```
+
+
+
+## Statistical Estimation: Confidence Intervals
+
+- Demonstrates how to visualize statistical estimates
+- Uses bootstrapped confidence intervals
+
+```{python}
+# | fig-width: 12
+# | fig-height: 8
+# | output-location: slide
+# Group data by day of week and calculate mean crime count
+crime_by_day = df.groupby("DAY_OF_WEEK").size().reset_index(name="COUNT")
+
+plt.figure(figsize=(12, 8))
+sns.barplot(
+    data=crime_by_day, x="DAY_OF_WEEK", y="COUNT", errorbar=("ci", 95), capsize=0.2
+)
+plt.title("Average Crime Count by Day of Week with 95% Confidence Intervals")
+plt.xticks(rotation=45)
+plt.show()
+```
+
+## Advanced Seaborn: FacetGrid
+
+- Demonstrates how to create multiple plots in a grid
+- Useful for comparing distributions across categories
+
+```{python}
+# | fig-width: 20
+# | fig-height: 20
+# | output-location: slide
+# Create a FacetGrid
+plt.figure(figsize=(20, 20))
+g = sns.FacetGrid(df, col="PRIMARY DESCRIPTION", col_wrap=3, height=4, aspect=1.5)
+
+# Map a histogram to each subplot
+g.map(plt.hist, "HOUR", bins=24)
+
+# Customize the plot
+g.set_axis_labels("Hour of Day", "Count")
+g.set_titles("{col_name}")
+g.fig.suptitle("Distribution of Crimes by Hour for Different Crime Types", y=1.02)
+g.tight_layout()
+plt.show()
+```
+
+
+## Best Practices and Tips
+
+- Choosing the right plot for your data
+- Pay attention to color choices and accessibility
+- Avoiding common pitfalls
+- Consider the story your visualization is telling
+
+
+## Q&A and Conclusion
+
+- Open floor for questions and discussion
+- Recap of key points
+- Additional resources for learning
+- Q&A session
+
+
+## Resours 
+
+- https://www.data-to-viz.com/
+- https://data.cityofchicago.org/Public-Safety/Crimes-One-year-prior-to-present/x2n5-8w5q/data
+- https://seaborn.pydata.org/generated/seaborn.lmplot.html#seaborn.lmplot
+- https://quarto.org/docs/presentations/revealjs/
+  
