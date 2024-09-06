@@ -6,7 +6,10 @@
 
 Seaborn is a powerful Python library that makes it easy to create informative and attractive statistical graphics. In this workshop, we’ll cover the basics of Seaborn, including how to create different types of plots, customize them, and interpret the results.
 
-# Begin 
+# Begin
 
 The easiest way to start is to use [Google Colab](https://colab.research.google.com/github/cauliyang/Visualizing-Data-with-Seaborn/blob/main/searborn_workshop_slides.ipynb)
 
+# Slides
+
+https://yangyangli.top/Visualizing-Data-with-Seaborn

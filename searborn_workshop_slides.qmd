@@ -27,24 +27,25 @@ execute:
 - Why use Seaborn for data visualization?
 - Brief overview of the session
 
-## Source Code  
-
+## Source Code   {.smaller}
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-GitHub
+GitHub ^[https://github.com/cauliyang/Visualizing-Data-with-Seaborn]
 
 ![](./qr-code.png)
 :::
 
 ::: {.column width="50%"}
 Colab
+
+![](./coqr-code.png)
 :::
 
 ::::
 
-Downloading Data
+## Downloading Data
 
 ```{bash}
 !mkdir data && wget -P data/ https://raw.githubusercontent.com/cauliyang/Visualizing-Data-with-Seaborn/main/data/Crimes_One_year_prior_to_present_first_1001.csv
