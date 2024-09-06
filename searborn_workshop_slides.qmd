@@ -45,8 +45,8 @@ Colab
 
 ## Setting Up the Environment
 
-```{bash}
-mkdir data && wget -P data/ https://raw.githubusercontent.com/cauliyang/Visualizing-Data-with-Seaborn/main/data/Crimes_One_year_prior_to_present_first_1001.csv
+```{python}
+!mkdir data && wget -P data/ https://raw.githubusercontent.com/cauliyang/Visualizing-Data-with-Seaborn/main/data/Crimes_One_year_prior_to_present_first_1001.csv
 ```
 
 ## Setting Up the Environment
