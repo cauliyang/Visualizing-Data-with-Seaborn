@@ -34,13 +34,13 @@ execute:
 ::: {.column width="50%"}
 GitHub ^[https://github.com/cauliyang/Visualizing-Data-with-Seaborn]
 
-![](.images/qr-code.png)
+![](images/qr-code.png)
 :::
 
 ::: {.column width="50%"}
 Colab
 
-![](.images/coqr-code.png)
+![](images/coqr-code.png)
 :::
 
 ::::
@@ -267,8 +267,7 @@ plt.show()
 
 ## Summary 
 
-![](.images/function_overview_8_0.png)
-
+![](images/function_overview_8_0.png)
 
 ## Heatmap
 
