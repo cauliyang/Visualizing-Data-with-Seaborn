@@ -7,7 +7,7 @@ date: "2024-09-11"
 fig-cap-location: bottom
 format: 
   revealjs:
-    theme: simple
+    theme: dark
     slide-number: true
     show-slide-number: all
     chalkboard: false 
@@ -332,7 +332,7 @@ Hint: Try `np.tril` instead of `np.triu`.
 
 ```{python}
 # | output-location: slide
-#| code-line-numbers: "8"
+# | code-line-numbers: "|8"
 # Select numeric columns
 numeric_cols = df.select_dtypes(include=[np.number]).columns
 
