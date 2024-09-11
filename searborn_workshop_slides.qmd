@@ -34,13 +34,13 @@ execute:
 ::: {.column width="50%"}
 GitHub ^[https://github.com/cauliyang/Visualizing-Data-with-Seaborn]
 
-![](./qr-code.png)
+![](.images/qr-code.png)
 :::
 
 ::: {.column width="50%"}
 Colab
 
-![](./coqr-code.png)
+![](.images/coqr-code.png)
 :::
 
 ::::
@@ -264,7 +264,6 @@ for i, v in enumerate(df["PRIMARY DESCRIPTION"].value_counts()[:10]):
 plt.tight_layout()
 plt.show()
 ```
-
 
 ## Summary 
 
