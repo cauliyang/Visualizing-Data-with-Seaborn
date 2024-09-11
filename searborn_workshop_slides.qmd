@@ -27,6 +27,10 @@ execute:
 - Why use Seaborn for data visualization?
 - Brief overview of the session
 
+::: {.notes}
+Engage the audience: Ask if anyone has used Seaborn before and what their experience was like.
+:::
+
 ## Source Code   {.smaller}
 
 :::: {.columns}
@@ -50,7 +54,7 @@ Colab
 
 ```{python }
 # | output: false
-# | code-line-numbers: "|6-18"
+# | code-line-numbers: "|6-18|29"
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -88,51 +92,27 @@ stardize_columns(df)
 ## Understanding the Dataset
 
 ```{python}
+# Exercise: Explore the dataset
+# 1. Use df.info() to display basic information about the dataset
+# 2. Use df.head() to show the first few rows
+
+# Your code here:
+
+
+# What insights can you gather from this initial exploration?
+```
+
+data source: https://data.cityofchicago.org/Public-Safety/Crimes-Map
+
+
+## Understanding the Dataset
+
+```{python}
 # | output: true
 # Display basic information about the dataset
 print(df.info())
 ```
 
-data source: https://data.cityofchicago.org/Public-Safety/Crimes-Map
-
-## Understanding the Dataset
-
-```{python}
-# | output: asis
-# | output-location: slide
-from IPython.display import display, HTML
-
-# Convert the first 10 rows of the DataFrame to HTML
-df_html = df.head(10).to_html(classes="dataframe", index=False)
-
-# Wrap the table in a div with scrolling
-html_content = f"""
-<div style="max-height: 400px; overflow: auto;">
-    <style>
-        .dataframe {{
-            font-size: 12px;
-            border-collapse: collapse;
-            width: 100%;
-        }}
-        .dataframe th, .dataframe td {{
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }}
-        .dataframe tr:nth-child(even) {{background-color: #f2f2f2;}}
-        .dataframe th {{
-            background-color: #4CAF50;
-            color: white;
-            position: sticky;
-            top: 0;
-        }}
-    </style>
-    {df_html}
-</div>
-"""
-
-display(HTML(html_content))
-```
 
 ## Introduction to Seaborn Plot Types
 
@@ -141,6 +121,7 @@ display(HTML(html_content))
 - Basic syntax and structure
 - Complex plot type
 
+
 ## Categorical Plots: Bar Plot 
 
 ```{python}
@@ -148,6 +129,10 @@ sns.countplot(data=df, y='PRIMARY DESCRIPTION', order=df['PRIMARY DESCRIPTION'].
 plt.title('Top 10 Crime Types')
 plt.show()
 ```
+
+::: {.notes}
+Ask the audience: What insights can we gather from this bar plot? Are there any surprising results?
+:::
 
 ## Further Exploration 
 
@@ -171,33 +156,9 @@ plt.axis("off")
 plt.show()
 ```
 
-## Categorical Plots: Box Plot
-
-```{python}
-df["DAY_OF_WEEK"] = df["DATE OF OCCURRENCE"].dt.day_name()
-plt.figure(figsize=(12, 5))
-sns.boxplot(data=df, x="DAY_OF_WEEK", y="DATE OF OCCURRENCE").set_ylabel("Date")
-plt.title("Distribution of Crimes by Day of the Week")
-plt.show()
-```
-
-## Categorical Plots: Violin Plot
-
-```{python}
-#| code-line-numbers: "2"
-plt.figure(figsize=(12, 5))
-sns.violinplot(data=df, x="DAY_OF_WEEK", y="DATE OF OCCURRENCE").set_ylabel("Date")
-plt.show()
-```
-
-## Categorical Plots: Box-and-Whisker Plot
-
-```{python}
-#| code-line-numbers: "2"
-plt.figure(figsize=(12, 5))
-sns.boxenplot(data=df, x="DAY_OF_WEEK", y="DATE OF OCCURRENCE").set_ylabel("Date")
-plt.show()
-```
+::: {.notes}
+Engage the audience: What words stand out to you? What might this tell us about the nature of crimes in the dataset?
+:::
 
 ## Distribution Plots: Histogram
 
@@ -265,6 +226,79 @@ plt.tight_layout()
 plt.show()
 ```
 
+
+## Categorical Plots: Box Plot
+
+```{python}
+df["DAY_OF_WEEK"] = df["DATE OF OCCURRENCE"].dt.day_name()
+plt.figure(figsize=(12, 5))
+sns.boxplot(data=df, x="DAY_OF_WEEK", y="DATE OF OCCURRENCE").set_ylabel("Date")
+plt.title("Distribution of Crimes by Day of the Week")
+plt.show()
+```
+
+::: {.notes}
+Here's a violin plot of crimes by day of the week
+:::
+
+
+## Categorical Plots: Violin Plot
+
+Now, it's your turn!
+
+```{python}
+# | output: false
+
+# Exercise: Change the violinplot to a boxenplot
+# Hint: Use sns.violinplot()
+
+plt.figure(figsize=(12, 5))
+# Your code here:
+
+plt.title("Distribution of Crimes by Day of the Week")
+plt.show()
+```
+
+
+
+## Categorical Plots: Violin Plot
+
+```{python}
+#| code-line-numbers: "2"
+plt.figure(figsize=(12, 5))
+sns.violinplot(data=df, x="DAY_OF_WEEK", y="DATE OF OCCURRENCE").set_ylabel("Date")
+plt.show()
+```
+
+## Categorical Plots: Box-and-Whisker Plot
+
+Now, it's your turn!
+
+```{python}
+# | output: false
+
+# Exercise: Change the violinplot to a boxenplot
+# Hint: Use sns.boxenplot()
+
+plt.figure(figsize=(12, 5))
+# Your code here:
+
+plt.title("Distribution of Crimes by Day of the Week")
+plt.show()
+```
+
+
+
+## Categorical Plots: Box-and-Whisker Plot
+
+```{python}
+#| code-line-numbers: "2"
+plt.figure(figsize=(12, 5))
+sns.boxenplot(data=df, x="DAY_OF_WEEK", y="DATE OF OCCURRENCE").set_ylabel("Date")
+plt.show()
+```
+
+
 ## Summary 
 
 ![](images/function_overview_8_0.png)
@@ -289,7 +323,12 @@ plt.xticks(rotation=45, ha="right")
 plt.show()  ## Customized Heatmap 
 ```
 
+
+Hint: Try `sns.heatmap()` with `annot=False`.
+
 ## Customized Heatmap
+
+Hint: Try `np.tril` instead of `np.triu`.
 
 ```{python}
 # | output-location: slide
@@ -334,6 +373,7 @@ plt.show()
 ```{python}
 # | output-location: slide
 # Select relevant columns for the pair plot
+# Hint: Choose a few relevant columns and use sns.pairplot()
 cols_to_plot = ["X COORDINATE", "Y COORDINATE", "LATITUDE", "LONGITUDE"]
 
 # Add hour of day
@@ -418,3 +458,5 @@ plt.show()
 - https://www.data-to-viz.com/
 - https://data.cityofchicago.org/Public-Safety/Crimes-One-year-prior-to-present/x2n5-8w5q/data
 - https://quarto.org/docs/presentations/revealjs/
+- https://seaborn.pydata.org/examples
+- https://seaborn.pydata.org/tutorial/color_palettes
