@@ -1,0 +1,17 @@
+/*-- scss:defaults --*/
+
+/* $body-bg: #191919; */ 
+/* https://www.northwestern.edu/brand/visual-identity/color-palettes/ */
+$body-bg: #38175A;  /* nw purple  #4E2A84  */
+
+$body-color: #fff;
+$link-color: #42affa;
+
+/* 078, 042, 132 */
+
+/*-- scss:rules --*/
+
+.reveal .slide blockquote {
+  border-left: 3px solid $text-muted;
+  padding-left: 0.5em;
+}

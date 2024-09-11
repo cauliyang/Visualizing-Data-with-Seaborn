@@ -7,7 +7,7 @@ date: "2024-09-11"
 fig-cap-location: bottom
 format: 
   revealjs:
-    theme: dark
+    theme: [simple, custom.scss]
     slide-number: true
     show-slide-number: all
     chalkboard: false 
@@ -102,7 +102,7 @@ stardize_columns(df)
 # What insights can you gather from this initial exploration?
 ```
 
-data source: https://data.cityofchicago.org/Public-Safety/Crimes-Map
+data source: https://data.cityofchicago.org/Public-Safety/Crimes-One-year-prior-to-present/x2n5-8w5q/data
 
 
 ## Understanding the Dataset
@@ -125,8 +125,13 @@ print(df.info())
 ## Categorical Plots: Bar Plot 
 
 ```{python}
-sns.countplot(data=df, y='PRIMARY DESCRIPTION', order=df['PRIMARY DESCRIPTION'].value_counts().index[:10])
-plt.title('Top 10 Crime Types')
+sns.countplot(
+    data=df,
+    y="PRIMARY DESCRIPTION",
+    order=df["PRIMARY DESCRIPTION"].value_counts().index[:10],
+)
+plt.title("Top 10 Crime Types")
+# sns.despine(offset=10, trim=True) Try that
 plt.show()
 ```
 
@@ -192,6 +197,7 @@ plt.show()
 ## Relational Plots: Line Plot
 
 ```{python}
+# | code-line-numbers: "|3|5"
 crime_counts = df.groupby("DATE OF OCCURRENCE").size().reset_index(name="COUNT")
 plt.figure(figsize=(10, 5))
 sns.lineplot(data=crime_counts, x="DATE OF OCCURRENCE", y="COUNT")
@@ -205,6 +211,7 @@ plt.show()
 
 ```{python}
 # | output-location: slide
+# | code-line-numbers: "|2-3|5-13|16-17|18|21-22|24"
 plt.figure(figsize=(14, 6))
 sns.set_style("whitegrid")
 sns.set_palette("deep")
@@ -219,8 +226,14 @@ g.set_title("Top 10 Crime Types", fontsize=20)
 g.set_xlabel("Count", fontsize=14)
 g.set_ylabel("Crime Type", fontsize=14)
 
-for i, v in enumerate(df["PRIMARY DESCRIPTION"].value_counts()[:10]):
-    g.text(v + 3, i, str(v), color="black", va="center")
+# Seaborn way: Add bar labels
+for container in g.containers:
+    g.bar_label(container)
+# g.bar_label(g.containers[0])
+
+# matplotlib way: Add bar labels
+# for i, v in enumerate(df["PRIMARY DESCRIPTION"].value_counts()[:10]):
+#     g.text(v + 3, i, str(v), color="black", va="center")
 
 plt.tight_layout()
 plt.show()
@@ -270,7 +283,7 @@ sns.violinplot(data=df, x="DAY_OF_WEEK", y="DATE OF OCCURRENCE").set_ylabel("Dat
 plt.show()
 ```
 
-## Categorical Plots: Box-and-Whisker Plot
+## Categorical Plots: enhanced box plot
 
 Now, it's your turn!
 
@@ -289,7 +302,7 @@ plt.show()
 
 
 
-## Categorical Plots: Box-and-Whisker Plot
+## Categorical Plots: enhanced box plot
 
 ```{python}
 #| code-line-numbers: "2"
@@ -298,8 +311,16 @@ sns.boxenplot(data=df, x="DAY_OF_WEEK", y="DATE OF OCCURRENCE").set_ylabel("Date
 plt.show()
 ```
 
+## Summary of Categorical Plots {.smaller}
 
-## Summary 
+- [boxkenplot](https://seaborn.pydata.org/generated/seaborn.boxenplot.html): Draw an enhanced box plot for larger datasets.
+- [boxplot](https://seaborn.pydata.org/generated/seaborn.boxplot.html): Draw a box plot to show distributions with respect to categories.
+- [violinplot](https://seaborn.pydata.org/generated/seaborn.violinplot.html): Draw a patch representing a KDE and add observations or box plot statistics.
+- [stripplot](https://seaborn.pydata.org/generated/seaborn.stripplot.html): Draw a categorical scatterplot using jitter to reduce overplotting.
+- [swarmplot](https://seaborn.pydata.org/generated/seaborn.swarmplot.html): Draw a categorical scatterplot with points adjusted to be non-overlapping.
+
+
+## API Summary 
 
 ![](images/function_overview_8_0.png)
 
@@ -310,6 +331,7 @@ plt.show()
 
 ```{python}
 # | output-location: slide
+# | code-line-numbers: "|9"
 # Select numeric columns
 numeric_cols = df.select_dtypes(include=[np.number]).columns
 
@@ -320,7 +342,7 @@ corr_matrix = df[numeric_cols].corr()
 plt.figure(figsize=(6, 6))
 sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", linewidths=0.5)
 plt.xticks(rotation=45, ha="right")
-plt.show()  ## Customized Heatmap 
+plt.show() 
 ```
 
 
@@ -398,8 +420,8 @@ plt.show()
 - Includes a linear regression line and confidence interval
 
 ```{python}
-# | code-line-numbers: "1"
 # | output-location: slide
+# | code-line-numbers: "|5-6|9|10"
 sns.lmplot(
     data=df,
     x="BEAT",
@@ -411,9 +433,10 @@ sns.lmplot(
     facet_kws=dict(sharex=False, sharey=False),
     scatter_kws={"alpha": 0.5},
 )
-plt.title("Regression Plot: Latitude vs Longitude of Crime Occurrences")
 plt.show()
 ```
+
+Hint: try `seaborn.regplot` or `seaborn.residplot`
 
 ## Advanced Seaborn: FacetGrid {.scrollable}
 
@@ -422,6 +445,7 @@ plt.show()
 
 ```{python}
 # | output-location: slide
+# | code-line-numbers: "|3-6|10"
 # Create a FacetGrid
 plt.figure(figsize=(4, 4))
 g = sns.FacetGrid(df, col="PRIMARY DESCRIPTION", col_wrap=3, height=4, aspect=1.5)
@@ -437,6 +461,41 @@ g.tight_layout()
 plt.show()
 ```
 
+## Seaborn figure styles
+
+```{python}
+# | output-location: slide
+# | code-line-numbers: "|13,17,21,25"
+import numpy as np
+
+
+def sinplot(n=10, flip=1):
+    x = np.linspace(0, 14, 100)
+    for i in range(1, n + 1):
+        plt.plot(x, np.sin(x + i * 0.5) * (n + 2 - i) * flip)
+
+
+f = plt.figure(figsize=(8, 8))
+gs = f.add_gridspec(2, 2)
+
+with sns.axes_style("darkgrid"):
+    ax = f.add_subplot(gs[0, 0])
+    sinplot(6)
+
+with sns.axes_style("white"):
+    ax = f.add_subplot(gs[0, 1])
+    sinplot(6)
+
+with sns.axes_style("ticks"):
+    ax = f.add_subplot(gs[1, 0])
+    sinplot(6)
+
+with sns.axes_style("whitegrid"):
+    ax = f.add_subplot(gs[1, 1])
+    sinplot(6)
+
+f.tight_layout()
+```
 
 
 ## Best Practices and Tips
