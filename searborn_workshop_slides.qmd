@@ -156,7 +156,6 @@ plt.show()
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
-
 # Combine all secondary descriptions into a single string
 text = " ".join(df["SECONDARY DESCRIPTION"].dropna())
 
@@ -199,7 +198,6 @@ plt.figure(figsize=(12, 5))
 sns.boxenplot(data=df, x="DAY_OF_WEEK", y="DATE OF OCCURRENCE").set_ylabel("Date")
 plt.show()
 ```
-
 
 ## Distribution Plots: Histogram
 
@@ -270,7 +268,7 @@ plt.show()
 
 ## Summary 
 
-![](./function_overview_8_0.png)
+![](.images/function_overview_8_0.png)
 
 
 ## Heatmap
