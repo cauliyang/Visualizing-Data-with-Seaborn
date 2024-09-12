@@ -36,7 +36,7 @@ Engage the audience: Ask if anyone has used Seaborn before and what their experi
 :::: {.columns}
 
 ::: {.column width="50%"}
-GitHub ^[https://github.com/cauliyang/Visualizing-Data-with-Seaborn]
+GitHub ^[https://bit.ly/dvw2024]
 
 ![](images/qr-code.png)
 :::

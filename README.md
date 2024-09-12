@@ -13,3 +13,7 @@ The easiest way to start is to use [Google Colab](https://colab.research.google.
 # Slides
 
 https://yangyangli.top/Visualizing-Data-with-Seaborn
+
+# The Data Visualization Week
+
+https://github.com/nuitrcs/data_vis_week_Sept2024
